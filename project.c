@@ -1,3 +1,16 @@
+char keypad() {
+    while(1) {
+        R1=1; R2=0; R3=1; R4=1;
+        if(C1==0) { while(C1==0); return '4'; }
+        if(C2==0) { while(C2==0); return '5'; }
+        if(C3==0) { while(C3==0); return '6'; }
+
+        R1=1; R2=1; R3=0; R4=1;
+        if(C1==0) { while(C1==0); return '1'; }
+        if(C2==0) { while(C2==0); return '2'; }
+        if(C3==0) { while(C3==0); return '3'; }
+    }
+}
 void main() {
     char pass[4];
     int i;
@@ -22,4 +35,5 @@ void main() {
         }
         delay(1000);
     }
+
 }
