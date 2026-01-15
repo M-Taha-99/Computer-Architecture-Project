@@ -9,6 +9,11 @@ void lcd_cmd(unsigned char cmd) {
 
 char keypad() {
     while(1) {
+        R1=0; R2=1; R3=1; R4=1;
+        if(C1==0) { while(C1==0); return '7'; }
+        if(C2==0) { while(C2==0); return '8'; }
+        if(C3==0) { while(C3==0); return '9'; }
+        
         R1=1; R2=0; R3=1; R4=1;
         if(C1==0) { while(C1==0); return '4'; }
         if(C2==0) { while(C2==0); return '5'; }
@@ -46,4 +51,5 @@ void main() {
     }
 
 }
+
 
