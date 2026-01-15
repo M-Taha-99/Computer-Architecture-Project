@@ -1,3 +1,12 @@
+void delay(unsigned int ms) {
+    unsigned int i, j;
+    for(i=0; i<ms; i++) for(j=0; j<1275; j++);
+}
+
+void lcd_cmd(unsigned char cmd) {
+    LCD_PORT = cmd; RS = 0; RW = 0; EN = 1; delay(1); EN = 0;
+}
+
 char keypad() {
     while(1) {
         R1=1; R2=0; R3=1; R4=1;
@@ -37,3 +46,4 @@ void main() {
     }
 
 }
+
