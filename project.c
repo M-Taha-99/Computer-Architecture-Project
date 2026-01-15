@@ -1,3 +1,8 @@
+sbit R1 = P1^0; sbit R2 = P1^1; sbit R3 = P1^2; sbit R4 = P1^3;
+sbit C1 = P1^4; sbit C2 = P1^5; sbit C3 = P1^6; sbit C4 = P1^7;
+// --- Output Pins ---
+sbit Motor = P3^0;
+sbit Buzzer = P3^1;
 void delay(unsigned int ms) {
     unsigned int i, j;
     for(i=0; i<ms; i++) for(j=0; j<1275; j++);
@@ -51,5 +56,6 @@ void main() {
     }
 
 }
+
 
 
