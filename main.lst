@@ -1,0 +1,103 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              01/15/2026 17:07:11 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          
+   3          // --- LCD Pins ---
+   4          sbit RS = P3^5;
+   5          sbit RW = P3^6;
+   6          sbit EN = P3^7;
+   7          #define LCD_PORT P2
+   8          
+   9          // --- Keypad Pins ---
+  10          sbit R1 = P1^0; sbit R2 = P1^1; sbit R3 = P1^2; sbit R4 = P1^3;
+  11          sbit C1 = P1^4; sbit C2 = P1^5; sbit C3 = P1^6; sbit C4 = P1^7;
+  12          
+  13          // --- Output Pins ---
+  14          sbit Motor = P3^0;
+  15          sbit Buzzer = P3^1;
+  16          
+  17          void delay(unsigned int ms) {
+  18   1          unsigned int i, j;
+  19   1          for(i=0; i<ms; i++) for(j=0; j<1275; j++);
+  20   1      }
+  21          
+  22          void lcd_cmd(unsigned char cmd) {
+  23   1          LCD_PORT = cmd; RS = 0; RW = 0; EN = 1; delay(1); EN = 0;
+  24   1      }
+  25          
+  26          void lcd_data(unsigned char dat) {
+  27   1          LCD_PORT = dat; RS = 1; RW = 0; EN = 1; delay(1); EN = 0;
+  28   1      }
+  29          
+  30          void lcd_str(char *s) {
+  31   1          while(*s) lcd_data(*s++);
+  32   1      }
+  33          
+  34          char keypad() {
+  35   1          while(1) {
+  36   2              R1=0; R2=1; R3=1; R4=1;
+  37   2              if(C1==0) { while(C1==0); return '7'; }
+  38   2              if(C2==0) { while(C2==0); return '8'; }
+  39   2              if(C3==0) { while(C3==0); return '9'; }
+  40   2              
+  41   2              R1=1; R2=0; R3=1; R4=1;
+  42   2              if(C1==0) { while(C1==0); return '4'; }
+  43   2              if(C2==0) { while(C2==0); return '5'; }
+  44   2              if(C3==0) { while(C3==0); return '6'; }
+  45   2      
+  46   2              R1=1; R2=1; R3=0; R4=1;
+  47   2              if(C1==0) { while(C1==0); return '1'; }
+  48   2              if(C2==0) { while(C2==0); return '2'; }
+  49   2              if(C3==0) { while(C3==0); return '3'; }
+  50   2          }
+  51   1      }
+  52          
+  53          void main() {
+  54   1          char pass[4];
+C51 COMPILER V9.60.7.0   MAIN                                                              01/15/2026 17:07:11 PAGE 2   
+
+  55   1          int i;
+  56   1          Motor = 0; Buzzer = 0;
+  57   1          lcd_cmd(0x38); lcd_cmd(0x0C); lcd_cmd(0x01);
+  58   1          
+  59   1          while(1) {
+  60   2              lcd_cmd(0x01); lcd_str("Enter PIN:");
+  61   2              lcd_cmd(0xC0); // Move to second line
+  62   2              
+  63   2              for(i=0; i<4; i++) {
+  64   3                  pass[i] = keypad();
+  65   3                  lcd_data('*'); // Show star for security
+  66   3              }
+  67   2              
+  68   2              if(pass[0]=='1' && pass[1]=='2' && pass[2]=='3' && pass[3]=='4') {
+  69   3                  lcd_cmd(0x01); lcd_str("Access Granted");
+  70   3                  Motor = 1; delay(500); Motor = 0;
+  71   3              } else {
+  72   3                  lcd_cmd(0x01); lcd_str("Wrong PIN!");
+  73   3                  Buzzer = 1; delay(500); Buzzer = 0;
+  74   3              }
+  75   2              delay(1000);
+  76   2          }
+  77   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    352    ----
+   CONSTANT SIZE    =     37    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
