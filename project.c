@@ -1,3 +1,12 @@
+#include<reg51.h>
+
+// --- LCD Pins ---
+sbit RS = P3^5;
+sbit RW = P3^6;
+sbit EN = P3^7;
+#define LCD_PORT P2
+
+//---Keypad Pins---
 sbit R1 = P1^0; sbit R2 = P1^1; sbit R3 = P1^2; sbit R4 = P1^3;
 sbit C1 = P1^4; sbit C2 = P1^5; sbit C3 = P1^6; sbit C4 = P1^7;
 // --- Output Pins ---
@@ -10,6 +19,13 @@ void delay(unsigned int ms) {
 
 void lcd_cmd(unsigned char cmd) {
     LCD_PORT = cmd; RS = 0; RW = 0; EN = 1; delay(1); EN = 0;
+}
+void lcd_data(unsigned char dat) {
+    LCD_PORT = dat; RS = 1; RW = 0; EN = 1; delay(1); EN = 0;
+}
+
+void lcd_str(char *s) {
+    while(*s) lcd_data(*s++);
 }
 
 char keypad() {
@@ -56,6 +72,7 @@ void main() {
     }
 
 }
+
 
 
 
